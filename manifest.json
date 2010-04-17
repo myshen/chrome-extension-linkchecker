@@ -1,8 +1,7 @@
 {
   "name": "Link Checker",
   "version": "1.0",
-  "description": "Quick and dirty link checker. Unreached links are dumped in
-  the console with the failed XHR.",
+  "description": "Link checker dumps failed links in console. Icon image: http://www.geekalerts.com/broken-image-necklace",
   "background_page": "background.html",
   "browser_action": {
     "default_icon": "icon.png",
@@ -10,7 +9,7 @@
   },
   "content_scripts": [
     {
-      "matches": ["http://*/*", "file:///*"],
+      "matches": ["http://*/*"],
       "css": ["jquery-ui.css"],
       "js": ["jquery.js", "jquery-ui.js", "linkchecker.js"],
       "all_frames": true
