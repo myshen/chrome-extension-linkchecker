@@ -1,0 +1,39 @@
+<html>
+<head>
+<script type="text/javascript">
+var defaultTimeout = 8000;
+function check(url, callback) {
+  var xhr = new XMLHttpRequest();
+  var timeout = null;
+  xhr.onreadystatechange = function (data) {
+    if (xhr.readyState == 4) {
+      clearTimeout(timeout);
+      return callback(xhr);
+    }
+  };
+  xhr.open("GET", url, true);
+  xhr.send();
+  timeout = setTimeout(function () {
+    console.log('aborting');
+    xhr.abort();
+    callback(null);
+  }, defaultTimeout);
+}
+
+function onRequest(request, sender, callback) {
+  if (request.action == "check") {
+    if (request.url) {
+      check(request.url, callback);
+    }
+  }
+}
+chrome.extension.onRequest.addListener(onRequest);
+chrome.browserAction.onClicked.addListener(function (tab) {
+  chrome.tabs.getSelected(null, function (tab) {
+    chrome.tabs.sendRequest(tab.id, {}, function (response) {});
+  });
+});
+</script>
+</head>
+<body></body>
+</html>
