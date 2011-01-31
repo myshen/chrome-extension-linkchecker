@@ -1,39 +1,47 @@
-<html>
-<head>
-<script type="text/javascript">
-var defaultTimeout = 8000;
-function check(url, callback) {
-  var xhr = new XMLHttpRequest();
-  var timeout = null;
-  xhr.onreadystatechange = function (data) {
-    if (xhr.readyState == 4) {
-      clearTimeout(timeout);
-      return callback(xhr);
-    }
+<!DOCTYPE html>
+<script>
+var http_head = (function () {
+  var default_timeout = 10000;
+  return function (url, callback, timeout) {
+    var xhr = new XMLHttpRequest();
+    var timeout = null;
+    // Sends XHR back to client page when 
+    // "All redirects (if any) have been followed and all HTTP headers of the
+    // final response have been received. Several response members of the
+    // object are now available." http://www.w3.org/TR/XMLHttpRequest/#states
+    xhr.onreadystatechange = function (data) {
+      // If HEADERS_RECEIVED
+      if (xhr.readyState >= 2) {
+        clearTimeout(timeout);
+        callback(xhr);
+      }
+    };
+    xhr.open("HEAD", url, true);
+    timeout = setTimeout(function () {
+      xhr.abort();
+    }, timeout ? timeout : default_timeout);
+    xhr.send();
   };
-  xhr.open("GET", url, true);
-  xhr.send();
-  timeout = setTimeout(function () {
-    console.log('aborting');
-    xhr.abort();
-    callback(null);
-  }, defaultTimeout);
-}
+})();
 
-function onRequest(request, sender, callback) {
+// Listen for link check requests from the page.
+// These are generated one per link found on the page where the extension
+// button is clicked.
+chrome.extension.onRequest.addListener(function (request, sender, sendResponse) {
+  var response = null;
   if (request.action == "check") {
-    if (request.url) {
-      check(request.url, callback);
+    if (request.uri) {
+      // TODO possibly fall back on GET if HEAD is not allowed?
+      return http_head(request.uri, sendResponse, request.timeout);
     }
+    return sendResponse(null, "No URI given");
   }
-}
-chrome.extension.onRequest.addListener(onRequest);
+  return sendResponse(null, "Invalid action");
+});
+// When the extension button is clicked, run through the given tab's links.
 chrome.browserAction.onClicked.addListener(function (tab) {
   chrome.tabs.getSelected(null, function (tab) {
-    chrome.tabs.sendRequest(tab.id, {}, function (response) {});
+    chrome.tabs.sendRequest(tab.id, {}, function () {});
   });
 });
 </script>
-</head>
-<body></body>
-</html>
