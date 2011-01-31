@@ -21,7 +21,7 @@
     }
   ],
   "permissions": [
-    "tabs", // To allow XHR (done in background tab)
+    "tabs",
     "http://*/*",
     "https://*/*"
   ]
