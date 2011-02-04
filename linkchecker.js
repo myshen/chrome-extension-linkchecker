@@ -3,22 +3,25 @@ chrome.extension.onRequest.addListener(
     var animateSpeed = 600;
     var anchors = $("a");
     var checked = 0;
+    var bad = 0;
     var checkStatus = $("<div></div>")
       .css({"width": "50%", "position": "absolute", "top": 0})
       .hide()
-      .progressbar({value: 0, change: function (event, ui) {
-            if (checked == anchors.size()) {
-              checkStatus.hide(animateSpeed);
-            }
-          }})
       .appendTo("body");
-    $(".ui-progressbar-value", checkStatus)
-      .css({"height": "100%",
-            "background-image": "url(http://jqueryui.com/demos/progressbar/images/pbar-ani.gif)"});
     checkStatus.show(animateSpeed);
     function checkedPlusPlus() {
       checked++;
-      checkStatus.progressbar({"value": checked / anchors.size()*100});
+      var percent = Math.round(checked / anchors.size() * 100);
+      checkStatus.html(percent + '%');
+      if (percent >= 100) {
+        if (bad > 0) {
+          checkStatus.css('background', '#f55');
+          checkStatus.html(bad + (bad == 1 ? 'error' : 'errors') +
+                           ' occurred while checking links');
+        } else {
+          checkStatus.remove();
+        }
+      }
     }
     function checkURI(uri, link) {
       link.css("background-color", "#ffa");
@@ -32,6 +35,7 @@ chrome.extension.onRequest.addListener(
                 // UNSENT, OPENED or error
                 console.log("XHR timed out or UNSENT/OPENED", link[0]);
                 link.css("background-color", "#aaf");
+                bad++;
               } else {
                 console.log("Failed link", response, link[0]);
                 link.css("background-color", "#faa");

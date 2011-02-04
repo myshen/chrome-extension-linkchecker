@@ -1,7 +1,9 @@
 {
   "name": "Link Checker",
   "version": "1.1",
-  "description": "Link checker dumps failed links in console. Icon image: http://www.geekalerts.com/broken-image-necklace",
+  "description": "Quick and dirty checking of links in page using XHR. Failed
+                  links are dumped in the console.
+                  Icon image: http://www.geekalerts.com/broken-image-necklace",
   "background_page": "background.html",
   "browser_action": {
     "default_icon": "icon.png",
@@ -15,8 +17,7 @@
   "content_scripts": [
     {
       "matches": ["http://*/*"],
-      "css": ["jquery-ui.css"],
-      "js": ["URI.js", "jquery.js", "jquery-ui.js", "linkchecker.js"],
+      "js": ["URI.js", "jquery.js", "linkchecker.js"],
       "all_frames": true
     }
   ],
