@@ -1,9 +1,7 @@
 {
   "name": "Link Checker",
-  "version": "1.1",
-  "description": "Quick and dirty checking of links in page using XHR. Failed
-                  links are dumped in the console.
-                  Icon image: http://www.geekalerts.com/broken-image-necklace",
+  "version": "1.1.1",
+  "description": "Link checking using XHR.",
   "background_page": "background.html",
   "browser_action": {
     "default_icon": "icon.png",
