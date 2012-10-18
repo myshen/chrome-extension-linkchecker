@@ -1,21 +1,25 @@
 {
   "name": "Link Checker",
-  "version": "1.2.1",
+  "manifest_version": 2,
+  "version": "1.3.0",
   "description": "Link checking using XHR.",
-  "background_page": "background.html",
-  "browser_action": {
-    "default_icon": "icon.png",
-    "default_title": "Link Checker"
-  },
   "icons": {
     "16": "icon.png",
     "48": "icon.png",
     "128": "icon_128.png"
   },
+  "browser_action": {
+    "default_icon": "icon.png",
+    "default_title": "Link Checker"
+  },
+  "background": {
+    "persistent": false,
+    "scripts": ["URI.js", "background.js"]
+  },
   "content_scripts": [
     {
-      "matches": ["http://*/*"],
-      "js": ["URI.js", "jquery.js", "linkchecker.js"],
+      "matches": ["*://*/*"],
+      "js": ["jquery.js", "linkchecker.js"],
       "all_frames": true
     }
   ],
