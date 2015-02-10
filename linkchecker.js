@@ -77,6 +77,10 @@ chrome.extension.onMessage.addListener(function(request, sender) {
         console.log("XHR timed out or UNSENT/OPENED", link[0]);
         link.css("background-color", "#aaf");
         bad++;
+      } else if (request.status == -1) {
+        // blacklisted
+        console.log("blacklisted link", link[0]);
+        link.css("background-color", "#ddd");
       } else {
         console.log(request.status, link[0]);
         link.css("background-color", "#faa");
