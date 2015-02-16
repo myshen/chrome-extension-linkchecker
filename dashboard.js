@@ -6,7 +6,7 @@
   var storage_key_blacklist = "linkchecker-blacklist";
 
   var textarea = document.createElement("TEXTAREA");
-  textarea.style.width = "600px";
+  textarea.style.width = "500px";
   textarea.style.height = "400px";
   var indicator = document.createElement("P");
 
