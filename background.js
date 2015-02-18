@@ -123,7 +123,7 @@ String.prototype.trim = function () {
 var STORAGE_KEY_BLACKLIST = "linkchecker-blacklist";
 function matchBlacklist(uri, blacklist) {
   var rules = [];
-  var lines = blacklist.split("\n");
+  var lines = (blacklist || "").split("\n");
   for (var i = 0; i < lines.length; i++) {
     var line = lines[i]
     if (line.length > 0 && line[0] == "#") {
